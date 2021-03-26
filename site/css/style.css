@@ -1,0 +1,171 @@
+* {
+   margin: 0;
+   padding: 0;
+   color: white;
+}
+
+body {
+   background-image: url(../img/fon.png);
+   background-attachment: fixed;
+   background-repeat: no-repeat;
+   background-size: auto;
+   font-family: arial;
+   font-size: 18px;
+   line-height: 26px;
+}
+
+.clear {
+   clear: both;
+}
+
+h1 {
+   margin-bottom: 40px;
+   line-height: 42px;
+}
+
+p {
+   margin-bottom: 20px;
+}
+
+.otstup {
+	margin-bottom: 100px;
+}
+
+.yellow {
+   color: rgba(255, 255, 0, .9);
+}
+
+.title {
+   width: 80%;
+   max-width: 1280px;
+   margin: auto;
+}
+
+.align-left {
+   float: left;
+   margin-right: 20px;
+   margin-bottom: 20px;
+   width: 400px;
+}
+
+.align-right {
+   float: right;
+   margin-right: 20px;
+   margin-bottom: 20px;
+   width: 400px;
+}
+
+.header,
+.main,
+.footer {
+   padding: 30px;
+}
+
+.header {
+   overflow: hidden;
+}
+
+.header .logo img {
+   height: 80px;
+}
+
+.header .logo,
+.header .site,
+.header .contacts {
+ display: inline-block;
+ vertical-align: middle;
+}
+
+.header .site {
+   margin-left: 100px;
+   font-size: 60px;
+   font-family: serif;
+}
+
+.header .contacts {
+  float: right;
+  text-align: right;
+}
+
+.header .contacts p:hover {
+   color: red;
+}
+
+.header .contacts h3 {
+   margin-bottom: 20px;
+   text-transform: uppercase;
+}
+
+.header .contacts p {
+   margin-bottom: 0;
+}
+
+.nav {
+   background-color: rgba(0, 255, 0, .5);
+}
+
+.nav ul {
+   list-style: none;
+}
+
+.nav li {
+   display: inline-block;
+}
+.nav a {
+   display: inline-block;
+   font-weight: bold;
+   color: black;
+   text-decoration: none;
+   text-transform: uppercase;
+   padding: 20px 30px;
+}
+
+.nav a:hover {
+   background-color: rgba(0, 255, 0, .9);
+   color: white;
+}
+
+.main {
+   background-color: rgba(0, 0, 0, .7);
+}
+
+.main .gallery-list {
+   padding: 20px 20px 20px 24px;
+}
+
+.main .gallery-list img {
+   vertical-align: middle;
+   display: inline-block;
+   width: calc(25% - 20px - 4px);
+   margin-left: -4px;
+   margin: 10px;
+   height: 200px;
+}
+
+.footer div {
+   display: inline-block;
+   vertical-align: middle;
+}
+
+.footer {
+   background-color: rgb(0, 0, 0, .9);
+   color: white;
+   text-align: center;
+   
+}
+
+.footer p {
+   margin-bottom: 0;
+}
+
+.niz-logo,
+.niz-info,
+.niz-contact {
+   margin-right: 50px;
+}
+
+.niz-logo img {
+   background-color: rgba(255, 255, 255, .5);
+   height: 50px;
+   box-shadow: 5px 5px 10px white;
+}

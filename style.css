@@ -1,0 +1,176 @@
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.window {
+    margin: 20px auto;
+    border: 3px dashed gray;
+    padding: 30px;
+    width: 1000px;
+    background-color: white;
+}
+
+body {
+    background-color:pink;
+}
+
+p {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: blue;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.loginExit button {
+    background-color: white;
+    margin-left: 50px;
+}
+
+.formEdit {
+    position: absolute;
+    width: 1000px;
+    margin-top: 20px;
+    margin-left: calc(50% - 500px);
+    display: none;
+}
+
+.formEdit button {
+    width: 200px;
+    margin: 10px;
+    text-transform: uppercase;
+    font-size: 22px;
+    padding: 10px 0;
+    cursor: pointer;
+    border: 0;
+}
+
+.formEdit button:hover:nth-child(1) {
+    background-color: greenyellow;
+}
+
+.formEdit button:hover:nth-child(2) {
+    background-color: red;
+}
+
+.formEdit span {
+    margin-left: calc(50% - 220px);
+}
+
+textarea {
+    width: 1000px;
+    height: 600px;
+    resize: none;
+    border: 2px solid gray;
+    padding: 10px 15px;
+    outline: 0;
+    font-size: 16px;
+}
+
+.formNewName {
+    position: absolute;
+    margin-top: 40px;
+    margin-left: calc(50% + 300px);
+    white-space: nowrap;
+    display: none;
+}
+
+.formNewName input {
+    outline: 0;
+}
+
+.formDelete {
+    position: absolute;
+    display: flex;
+    margin-top: 40px;
+    margin-left: calc(50% + 300px);
+    display: none;
+}
+
+.formDelete form {
+    margin: 0;
+    margin-left: 40px;
+}
+
+.back {
+    margin-bottom: 10px;
+}
+
+.string {
+    margin-left: 20px;
+}
+
+.edit a {
+    color: green;
+}
+
+.rename a {
+    color: blueviolet;
+}
+
+.delete a {
+    color: red;
+}
+
+.open a {
+    color: goldenrod;
+}
+
+.root {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.create {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.create input:nth-child(2),
+.create input:nth-child(4) {
+    margin: 0 5px;
+}
+
+.create input:not(:nth-child(2)) {
+    margin-right: 20px;
+}
+
+.create label {
+    margin-right: 20px;
+}
+
+.loadFile {
+    margin-top: 15px;
+}
+
+.table {
+    width: 985px;
+    border-collapse: collapse;
+    margin-left: auto;
+}
+
+table tr {
+    border-bottom: 1px solid gray;
+}
+
+table tr td {
+    width: 15%;
+    height: 40px;
+}
+
+table tr td:nth-child(3),
+table tr td:nth-child(4),
+table tr td:nth-child(5),
+table tr td:nth-child(6) {
+    text-align: center;
+}
