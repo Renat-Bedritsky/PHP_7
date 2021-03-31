@@ -34,7 +34,7 @@ a:visited {
 
 .loginExit button {
     background-color: white;
-    margin-left: 50px;
+    margin: 0 50px;
 }
 
 .formEdit {

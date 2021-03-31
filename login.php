@@ -12,12 +12,13 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         echo '<p>Check form data</p>';
     }
     else {
+        $passEnter = md5($_POST['password']);
         if ($_POST['login'] == $iniArr['login'] && 
-            $_POST['password'] == $iniArr['password']) {
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $passEnter == $iniArr['password']) {
+            // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $login = password_hash($_POST['login'], PASSWORD_DEFAULT);
-            setcookie('login', $login, time()+1800);
-            setcookie('password', $password, time()+1800);
+            setcookie('login', $_POST['login'], time()+1800);
+            // setcookie('password', $password, time()+1800);
             header("location: /admin/?dir=$dir");
         }
         else echo '<p>Check form data</p>';

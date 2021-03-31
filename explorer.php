@@ -198,20 +198,21 @@ if (isset($_GET['edit'])) {
 ?>
 
 <form method='POST' class='formEdit'>
-    <textarea name='content'><?= $content; ?></textarea>
+    <textarea name='content'><?= htmlspecialchars_decode($content); ?></textarea>
     <span class='editButton'>
         <button name='edit' type='submit' value='editYes'>Сохранить</button> 
         <button name='edit' type='submit' value='editNo'>Отмена</button>
     </span>
 </form>
-
+<?php echo $_SERVER['DOCUMENT_ROOT']; ?>
 <?php
     if (isset($_POST['edit'])) {
         if ($_POST['edit'] == 'editYes') {                                            // Если пользователь нажал кнопку "Сохранить"
-            file_put_contents($dir.'/'.$edit, $_POST['content']);                     // file_put_contents записывает содержимое textarea в файл (путь к файлу, "кодировка UTF-8" . путь к textarea)
+            $codeUTF8 = mb_convert_encoding($_POST['content'], "UTF-8");    // Перекодировка в UTF-8, "EUC-JP"
+            file_put_contents($dir.'/'.$edit, $codeUTF8);                             // file_put_contents записывает содержимое textarea в файл (путь к файлу, путь к textarea)
             header("location: /admin/?dir=$dir");                                     // Выполняется перевод на текущую директорию
         }
-        else if ($_POST['edit'] == 'editNo') {header("location: /admin/?dir=$dir");   // Выполняется перевод на текущую директорию
+        else if ($_POST['edit'] == 'editNo') {header("location: ".$_SERVER['DOCUMENT_ROOT']."/admin/?dir=$dir");   // Выполняется перевод на текущую директорию
         }
     }
 }?>
@@ -221,9 +222,10 @@ if (isset($_GET['edit'])) {
 
 
 <div class="window">
+
+
+
 <div class="wrapper">
-
-
 
 <!-- Переводит на скрипт с авторизацией -->
 
@@ -236,7 +238,7 @@ if (isset($_GET['edit'])) {
 <!-- Скрипт для выхода из аккаунта -->
 
 <?php 
-if (!empty($_COOKIE['login']) && !empty($_COOKIE['password'])) {
+if (!empty($_COOKIE['login'])) {
     echo '<style>.loginExit{display:block;}</style>';          // Выводит форму 
 ?>
     
@@ -244,13 +246,23 @@ if (!empty($_COOKIE['login']) && !empty($_COOKIE['password'])) {
     <button name="loginExit">Выйти</button>
 </form>
 
-<?php if (isset($_POST['loginExit'])) header('location: ./logout.php'); } ?>
+<?php if (isset($_POST['loginExit'])) header('location: ./logout.php'); } 
+
+
+
+// Отображает какой пользователь авторизован
+if (isset($_COOKIE['login'])) {
+    $iniArr = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/admin/config.ini'); 
+    echo $iniArr['login'];
+} ?>
+
+
+
+</div>
 
 
 
 <!-- Формирование списка -->
-
-</div>
 
 <?php foreach ($arHere as $path) {
     if ($path == '.') continue;
@@ -278,18 +290,20 @@ if (!empty($_COOKIE['login']) && !empty($_COOKIE['password'])) {
 
         <?php
 
-        // Скрывает папки и файлы, когда пользователь не авторизирован
-        if (isset($_COOKIE['login']) && isset($_COOKIE['password'])) {
-            $iniArr = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/admin/config.ini'); 
-            if ($_COOKIE['login'] == $iniArr['login'] && $_COOKIE['password'] == $iniArr['password']) {
-                if ($path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
-                    continue;
+        if (preg_match($checkDir, $dir)) {
+            // Скрывает папки и файлы, когда пользователь не авторизирован
+            if (isset($_COOKIE['login'])) {
+                $iniArr = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/admin/config.ini'); 
+                if ($_COOKIE['login'] != $iniArr['login']) {
+                    if ($path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
+                        continue;
+                    }
                 }
             }
-        }
-        else {
-            if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
-                continue;
+            else {
+                if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
+                    continue;
+                }
             }
         }
 
