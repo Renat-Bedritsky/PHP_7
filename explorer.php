@@ -6,6 +6,56 @@
     <title>Document</title>
     <link rel="stylesheet" href="/admin/style.css">
     <link rel="stylesheet" href="/admin/media.css">
+    <style>
+
+        <?php 
+            if (isset($_GET['edit'])) { ?>
+                .window {
+                    display: none;
+                }
+                .formEdit {
+                    display: block;
+                }
+            <?php }
+
+            if (isset($_GET['read'])) { ?>
+                .window {
+                    display: none;
+                }
+                .formRead {
+                    display: block;
+                }
+            <?php }
+
+            if (isset($_GET['rename'])) { ?>
+                .formNewName{
+                    display:block;
+                }
+            <?php }
+
+            if (isset($_GET['delete'])) { ?>
+                .formDelete{
+                    display:block;
+                }
+            <?php }
+
+            if (isset($_GET['open'])) { ?>
+                body{
+                    background-color: #fff !important;
+                } 
+                .window{
+                    display:none;
+                }
+            <?php }
+
+            if (!empty($_COOKIE['login'])) { ?>
+                .loginExit{
+                    display:block;
+                }
+            <?php }
+        ?>
+
+    </style>
 </head>
 <body>
 
@@ -50,7 +100,6 @@ if (preg_match('/\/explorer\.php$/', $_SERVER['PHP_SELF']) == 1) {   // Если
 
 if (isset($_GET['rename'])) {                                                            // Если GET 'rename' существует
     $info = pathinfo($dir.'\\'.$_GET['rename']);
-    echo '<style>.formNewName{display:block;}</style>';                                  // Выводит форму
 ?>
 
 <form method="POST" class="formNewName">
@@ -66,7 +115,7 @@ if (isset($_GET['rename'])) {                                                   
         // }
 
         $checkNewName = '/^[a-z0-9 _-]{1,}$/i';
-        if (preg_match($checkNewName, $_POST['rename'])) {                                // Если проходит проверку   TODO
+        if (preg_match($checkNewName, $_POST['rename'])) {                                // Если проходит проверку
             if (isset($info['extension'])) {
             rename($_GET['rename'], $dir.'\\'.$_POST['rename'].'.'.$info['extension']);   // Переименование файла (старое имя, новое имя)
             }
@@ -81,7 +130,6 @@ if (isset($_GET['rename'])) {                                                   
 // Форма для удаления папки/файла
 
 if (isset($_GET['delete'])) {
-    echo '<style>.formDelete{display:block;}</style>';   // Выводит форму
 ?>
 
 <div class="formDelete" style="display: flex;">
@@ -112,11 +160,11 @@ if (isset($_GET['delete'])) {
 
 
 
-// Скрипт для переименования
+// Скрипт для создания
 
 if(isset($_POST['type']) && isset($_POST['newWay'])) {
     $newWay = $_POST['newWay'];
-    if (preg_match('/^[a-z0-9 _-]{1,}$/i', $newWay)) {                                  // Если проходит проверку   TODO
+    if (preg_match('/^[a-z0-9 _-]{1,}$/i', $newWay)) {                                  // Если проходит проверку
         $newWay = $dir.'\\'.$newWay;                                                    // Присваивание пути
         $type = $_POST['type'];
         if ($type == 'dir') {
@@ -179,8 +227,7 @@ function getFilesSize($path){
 
 // Открывает html файлы
 
-if (isset($_GET['open'])) {                                                                 // Если существует $_GET['open]
-    echo '<style>body{backgroun-color: #fff !important;} .window{display:none;}</style>';   // Скрывает сраницу
+if (isset($_GET['open'])) {                                                                 // Если существует $_GET['open']
     $open = $_GET['open'];
     $content = file_get_contents($dir.'/'.$open);                                           // file_get_contents читает содержимое файла
     echo $content;
@@ -190,11 +237,9 @@ if (isset($_GET['open'])) {                                                     
 
 // Форма для редактирования
 
-if (isset($_GET['edit'])) {
+if (isset($_GET['edit'])):
     $edit = $_GET['edit'];
     $content = file_get_contents($dir.'/'.$edit);                                    // file_get_contents читает содержимое файла
-
-    echo '<style>.window{display:none;}.formEdit{display:block;}</style>';           // Выводит форму
 ?>
 
 <form method='POST' class='formEdit'>
@@ -204,18 +249,39 @@ if (isset($_GET['edit'])) {
         <button name='edit' type='submit' value='editNo'>Отмена</button>
     </span>
 </form>
-<?php echo $_SERVER['DOCUMENT_ROOT']; ?>
+
 <?php
-    if (isset($_POST['edit'])) {
-        if ($_POST['edit'] == 'editYes') {                                            // Если пользователь нажал кнопку "Сохранить"
-            $codeUTF8 = mb_convert_encoding($_POST['content'], "UTF-8");    // Перекодировка в UTF-8, "EUC-JP"
+    if (isset($_POST['edit'])):
+        if ($_POST['edit'] == 'editYes'):                                             // Если пользователь нажал кнопку "Сохранить"
+            $codeUTF8 = mb_convert_encoding($_POST['content'], "UTF-8");              // Перекодировка в UTF-8, "EUC-JP"
             file_put_contents($dir.'/'.$edit, $codeUTF8);                             // file_put_contents записывает содержимое textarea в файл (путь к файлу, путь к textarea)
             header("location: /admin/?dir=$dir");                                     // Выполняется перевод на текущую директорию
-        }
-        else if ($_POST['edit'] == 'editNo') {header("location: ".$_SERVER['DOCUMENT_ROOT']."/admin/?dir=$dir");   // Выполняется перевод на текущую директорию
-        }
-    }
-}?>
+        elseif ($_POST['edit'] == 'editNo'):
+            header("location: /admin/?dir=$dir");                                     // Выполняется перевод на текущую директорию
+        endif;
+    endif;
+endif;
+
+
+
+// Форма для чтения
+
+if (isset($_GET['read'])):
+    $read = $_GET['read'];
+    $contentRead = file_get_contents($dir.'/'.$read);                                    // file_get_contents читает содержимое файла
+?>
+
+<form method='POST' class='formRead'>
+    <textarea readonly name="contentRead"><?= $contentRead; ?></textarea>
+    <button name='exitRead' type='submit'>Назад</button>
+</form>
+
+<?php 
+    if (isset($_POST['exitRead'])):
+        header("location: /admin/?dir=$dir");        // Выполняется перевод на текущую директорию
+    endif;
+endif;
+?>
 
 
 
@@ -227,19 +293,18 @@ if (isset($_GET['edit'])) {
 
 <div class="wrapper">
 
-<!-- Переводит на скрипт с авторизацией -->
+<!-- Переводит на login.php -->
 
-<?php if (isset($_GET['enter'])) header('location: /admin/login.php'); ?>
+<?php if (isset($_GET['enter'])) header("location: /admin/login.php"); ?>
 
-<a href="/admin/?dir=<?= $dir ?>&enter">Войти</a>
+<a href="/admin/?enter">Войти</a>
 
 
 
-<!-- Скрипт для выхода из аккаунта -->
+<!-- Кнопка для выхода из аккаунта -->
 
 <?php 
 if (!empty($_COOKIE['login'])) {
-    echo '<style>.loginExit{display:block;}</style>';          // Выводит форму 
 ?>
     
 <form class="loginExit" method="POST">
@@ -252,8 +317,16 @@ if (!empty($_COOKIE['login'])) {
 
 // Отображает какой пользователь авторизован
 if (isset($_COOKIE['login'])) {
-    $iniArr = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/admin/config.ini'); 
-    echo $iniArr['login'];
+    $file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/admin/users.json', true);
+    $data = json_decode($file);
+    foreach ($data as $path) {
+        foreach ($path as $key => $value) {
+            if (md5($value) == $_COOKIE['login']) {
+                echo $value;
+                break;
+            }
+        }
+    }
 } ?>
 
 
@@ -293,15 +366,46 @@ if (isset($_COOKIE['login'])) {
         if (preg_match($checkDir, $dir)) {
             // Скрывает папки и файлы, когда пользователь не авторизирован
             if (isset($_COOKIE['login'])) {
-                $iniArr = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/admin/config.ini'); 
-                if ($_COOKIE['login'] != $iniArr['login']) {
-                    if ($path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
+                $file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/admin/users.json', true);
+                $data = json_decode($file);
+                $pathLog = 'false';
+                global $pathLog;
+                $data = (array)$data;             // Преобразование объекта в массив
+                $data[0] = (array)$data[0];       // Преобразование объекта в массив
+                foreach ($data as $pathF) {
+                    $pathF = (array)$pathF;
+                    if ($_COOKIE['login'] == md5($pathF['login'])) {
+                        if ($_COOKIE['login'] != md5($data[0]['login'])) {
+                        $pathLog = 'true';
+                        }
+                    }
+                }
+                if ($pathLog == 'true') {
+                    if ($path == 'style.css' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json') {
+                        echo '<tr><td>'.$path.'</td>';
+                        if (filesize($path) <= 1024) {
+                            echo '<td><span>'.filesize($path).' байт</span></td>';                       // Функция для определения размера папки в байтах
+                        }
+                        else if (filesize($path) <= (1024*1024)) {
+                            echo '<td><span>'. round(filesize($path)/1024) .' Кбайт</span></td>';        // Функция для определения размера папки в Кбайтах
+                        }
+                        else {
+                            echo '<td><span>'. round(filesize($path)/1024/1024) .' Мбайт</span></td>';   // Функция для определения размера папки в Мбайтах
+                        } ?>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="/admin/?dir=<?= $dir ?>&read=<?= $path; ?>">Читать</a>
+                            </td>
+                        </tr>
+                        <?php
                         continue;
                     }
                 }
             }
             else {
-                if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php') {
+                if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json') {
                     continue;
                 }
             }
@@ -374,7 +478,7 @@ if (isset($_COOKIE['login'])) {
         } 
 
 
-        if ($path =='index.php') {
+        if ($path =='index.php' || $path == 'explorer.php') {
             echo   '<td></td>
                     <td></td>
                     <td></td>
