@@ -1,3 +1,8 @@
+<?php 
+
+include 'DB.php';
+include 'Users.php'; ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -366,22 +371,10 @@ if (isset($_COOKIE['login'])) {
         if (preg_match($checkDir, $dir)) {
             // Скрывает папки и файлы, когда пользователь не авторизирован
             if (isset($_COOKIE['login'])) {
-                $file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/admin/users.json', true);
-                $data = json_decode($file);
-                $pathLog = 'false';
-                global $pathLog;
-                $data = (array)$data;             // Преобразование объекта в массив
-                $data[0] = (array)$data[0];       // Преобразование объекта в массив
-                foreach ($data as $pathF) {
-                    $pathF = (array)$pathF;
-                    if ($_COOKIE['login'] == md5($pathF['login'])) {
-                        if ($_COOKIE['login'] != md5($data[0]['login'])) {
-                        $pathLog = 'true';
-                        }
-                    }
-                }
-                if ($pathLog == 'true') {
-                    if ($path == 'style.css' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json') {
+                $checkCookie = new Users();
+                $pathLog = $checkCookie->checkByCookie($_COOKIE['login']);
+                if ($pathLog == 1) {
+                    if ($path == 'style.css' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json' || $path == 'DB.php' || $path == 'Users.php') {
                         echo '<tr><td>'.$path.'</td>';
                         if (filesize($path) <= 1024) {
                             echo '<td><span>'.filesize($path).' байт</span></td>';                       // Функция для определения размера папки в байтах
@@ -403,9 +396,17 @@ if (isset($_COOKIE['login'])) {
                         continue;
                     }
                 }
+                else if ($pathLog == 2) {
+                    // code for admin in down
+                }
+                else {
+                    if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json' || $path == 'DB.php' || $path == 'Users.php') {
+                        continue;
+                    }
+                }
             }
             else {
-                if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json') {
+                if ($path == 'index.php' || $path == 'style.css' || $path == 'explorer.php' || $path == 'media.css' || $path == 'uploader.php' || $path == 'config.ini' || $path == 'login.php' || $path == 'logout.php' || $path == 'users.json' || $path == 'DB.php' || $path == 'Users.php') {
                     continue;
                 }
             }
@@ -413,6 +414,7 @@ if (isset($_COOKIE['login'])) {
 
 
 
+        // code for admin
         if (is_dir($path)) {
             ?>
 
